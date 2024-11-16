@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
+  const [sessionId] = useState(uuidv4());
 
   // Send message to the backend and handle response
   const handleSendMessage = async (text) => {
@@ -16,7 +18,7 @@ const Chat = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ sessionId:'a',question: text }),
+        body: JSON.stringify({ sessionId ,question: text }),
       });
 
       const data = await response.json();
