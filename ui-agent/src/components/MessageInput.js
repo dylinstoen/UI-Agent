@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 const MessageInput = ({ onSendMessage }) => {
   const [text, setText] = useState('');
 

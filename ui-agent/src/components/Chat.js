@@ -5,28 +5,27 @@ import MessageInput from './MessageInput';
 const Chat = () => {
   const [messages, setMessages] = useState([]);
 
-  const dummyResponses = [
-    "Hello! How can I help you?",
-    "That's interesting, tell me more!",
-    "I'm just a dummy bot, but I'm listening.",
-    "Wow, really? That's cool!",
-    "I don't have an answer for that, but I'll try my best to help!"
-  ];
-
-  const handleSendMessage = (text) => {
-    // Add user's message to the chat
+  // Send message to the backend and handle response
+  const handleSendMessage = async (text) => {
     const userMessage = { id: Date.now(), text, sender: 'user' };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-    // Trigger a dummy response
-    setTimeout(() => {
-      const botMessage = {
-        id: Date.now() + 1,
-        text: dummyResponses[Math.floor(Math.random() * dummyResponses.length)],
-        sender: 'bot',
-      };
+    try {
+      const response = await fetch('http://localhost:3000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sessionId:'a',question: text }),
+      });
+
+      const data = await response.json();
+      const botMessage = { id: Date.now() + 1, text: data.answer, sender: 'bot' };
+
       setMessages((prevMessages) => [...prevMessages, botMessage]);
-    }, 1000); // 1-second delay for bot response
+    } catch (error) {
+      console.error('Error communicating with server:', error);
+    }
   };
 
   return (
@@ -37,6 +36,7 @@ const Chat = () => {
     </div>
   );
 };
+
 
 const styles = {
   chatContainer: {
