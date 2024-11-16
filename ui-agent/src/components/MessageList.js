@@ -1,4 +1,5 @@
 import React from 'react';
+import profilePic from '../assets/profile.jpg'
 
 const MessageList = ({ messages }) => {
   return (
@@ -7,35 +8,57 @@ const MessageList = ({ messages }) => {
         <div
           key={message.id}
           style={{
-            ...styles.message,
-            alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
-            backgroundColor: message.sender === 'user' ? '#007BFF' : '#0651a1', // Blue for user, green for bot
-            color: 'white', // White text for both
+            ...styles.messageContainer,
+            flexDirection: message.sender === 'user' ? 'row-reverse' : 'row', // Reverse for user messages
           }}
         >
-          {message.text}
+          {message.sender !== 'user' && (
+            <img
+              src={profilePic} // Replace with your bot/profile image URL
+              alt="Profile"
+              style={styles.profilePicture}
+            />
+          )}
+          <div
+            style={{
+              ...styles.message,
+              alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
+              backgroundColor: message.sender === 'user' ? '#007BFF' : '#0651a1',
+              color: 'white',
+            }}
+          >
+            {message.text}
+          </div>
         </div>
       ))}
     </div>
   );
 };
 
-
 const styles = {
   messageList: {
     flex: 1,
     overflowY: 'auto',
-    marginBottom: '10px',
     padding: '10px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '5px',
+    gap: '10px',
+  },
+  messageContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px', // Space between profile picture and message
+  },
+  profilePicture: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%', // Circular image
+    objectFit: 'cover',
   },
   message: {
     maxWidth: '70%',
     padding: '10px',
     borderRadius: '10px',
-    margin: '5px 0',
     wordWrap: 'break-word',
   },
 };

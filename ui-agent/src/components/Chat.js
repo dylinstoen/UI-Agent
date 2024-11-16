@@ -30,7 +30,7 @@ const Chat = () => {
 
   return (
     <div style={styles.chatContainer}>
-      <h2>Chat</h2>
+      <h2>PennyWise</h2>
       <MessageList messages={messages} />
       <MessageInput onSendMessage={handleSendMessage} />
     </div>
@@ -43,6 +43,7 @@ const styles = {
     width: '800px',
     height: '1000px',
     border: '1px solid #ccc',
+    textAlign: 'center',
     borderRadius: '5px',
     display: 'flex',
     flexDirection: 'column',
