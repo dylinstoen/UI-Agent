@@ -68,3 +68,137 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+```
+import React, { useState } from 'react';
+
+const Chat = () => {
+  const [messages, setMessages] = useState([]);
+
+  // Send message to the backend and handle response
+  const handleSendMessage = async (text) => {
+    const userMessage = { id: Date.now(), text, sender: 'user' };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await response.json();
+      const botMessage = { id: Date.now() + 1, text: data.response, sender: 'bot' };
+
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error communicating with server:', error);
+    }
+  };
+
+  return (
+    <div style={styles.chatContainer}>
+      <h2>Chat</h2>
+      <MessageList messages={messages} />
+      <MessageInput onSendMessage={handleSendMessage} />
+    </div>
+  );
+};
+
+const styles = {
+  chatContainer: {
+    width: '400px',
+    height: '500px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '10px',
+    backgroundColor: '#f9f9f9',
+  },
+};
+
+const MessageList = ({ messages }) => (
+  <div style={styles.messageList}>
+    {messages.map((message) => (
+      <div
+        key={message.id}
+        style={{
+          ...styles.message,
+          alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
+          backgroundColor: message.sender === 'user' ? '#007BFF' : '#4CAF50',
+          color: 'white',
+        }}
+      >
+        {message.text}
+      </div>
+    ))}
+  </div>
+);
+
+const MessageInput = ({ onSendMessage }) => {
+  const [text, setText] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (text.trim()) {
+      onSendMessage(text);
+      setText('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={styles.form}>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Type a message..."
+        style={styles.input}
+      />
+      <button type="submit" style={styles.button}>
+        Send
+      </button>
+    </form>
+  );
+};
+
+const styles = {
+  messageList: {
+    flex: 1,
+    overflowY: 'auto',
+    marginBottom: '10px',
+    padding: '5px',
+  },
+  message: {
+    maxWidth: '70%',
+    padding: '10px',
+    borderRadius: '10px',
+    margin: '5px 0',
+    wordWrap: 'break-word',
+  },
+  form: {
+    display: 'flex',
+  },
+  input: {
+    flex: 1,
+    padding: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+  },
+  button: {
+    marginLeft: '5px',
+    padding: '10px',
+    borderRadius: '5px',
+    border: 'none',
+    backgroundColor: '#007BFF',
+    color: 'white',
+    cursor: 'pointer',
+  },
+};
+
+export default Chat;
+
+```
