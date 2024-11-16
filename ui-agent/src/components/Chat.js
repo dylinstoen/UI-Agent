@@ -43,7 +43,7 @@ const Chat = () => {
 const styles = {
   chatContainer: {
     width: '800px',
-    height: '1000px',
+    height: '600px',
     border: '1px solid #ccc',
     textAlign: 'center',
     borderRadius: '5px',
