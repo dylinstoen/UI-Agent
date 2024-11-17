@@ -4,18 +4,21 @@ const OpenAIApi = require('openai');
 const crypto = require('crypto');
 const cors = require('cors');
 
+require('dotenv').config();
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(express.static('C:\\Users\\20051\\Downloads\\hackathon-20241116T183919Z-001\\hackathon\\UI-Agent\\ui-agent')); // Serve the frontend
+app.use(express.static('absolute\\path\\to\\ui-agent')); // Serve the frontend
 app.use(cors({
     origin: 'http://localhost:3000', // Allow requests from this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
     allowedHeaders: ['Content-Type'], // Allow these headers
   }));
 const openai = new OpenAIApi({
-    apiKey: ''
+    apiKey: OPENAI_API_KEY
 });
 
 const sessionMemory = {};
